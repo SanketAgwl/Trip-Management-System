@@ -1,39 +1,26 @@
-create database project;
-use project;
-
-create table Bus(
-bus_id int not null,
-survice_provider varchar(50),
-is_ac char,
-rating float
-);
+use sql12373655;
+create table city(city_name varchar(20));
+alter table city add primary key (city_name);
+create table Train(train_id int primary key,train_name varchar(30));
+create table TrainDepartureTime(train_id int,source varchar(30),departure_time time,primary key(train_id,source), foreign key(train_id) references Train(train_id) );
+create table TrainReservation(train_id int,class varchar(30),source varchar(30),destination varchar(30),departure_time time,fare int,train_status varchar(30),primary key(train_id,source,class,destination,departure_time), foreign key(train_id,source) references TrainDepartureTime(train_id,source) , foreign key (destination) references City(city_name));
+create table TrainJourneyHours(train_id int,source varchar(30),destination varchar(30), journey_hours decimal (4,2),primary key(train_id,destination,source), foreign key (train_id,source) references TrainDepartureTime (train_id,source));
+create table CabType(cab_type varchar(30),primary key(cab_type));
+create table CabService(cab_service_id varchar(10),provider_name varchar(30),contact_no int,rating numeric(2,1), primary key(cab_service_id) );
+create table CabServiceInACity(cab_service_id varchar(10),city_name varchar(20),primary key(cab_service_id,city_name),foreign key(Cab_service_id) references CabService(cab_service_id),foreign key(city_name) references City(city_name));
+create table Cabs(cab_service_id varchar(10),city_name varchar(20),cab_type varchar(30),cost_per_day int,total_available_cabs int,primary key(cab_service_id,city_name,cab_type), foreign key(city_name) references City(city_name),foreign key(cab_type) references CabType(cab_type));
+create table Bus(bus_id int not null,survice_provider varchar(50),is_ac char,rating float);
 ALTER TABLE Bus  add primary key (Bus_id);
-
-create table BusDepartureTime(
-bus_id int not null,
-source varchar(20),
-deoparture_date varchar(10),
-time_of_departure varchar(10),
-foreign key (bus_id) references Bus(Bus_id));
-alter table BusDepartureTime add primary key (deoparture_date);
-
-create table BusJourneyHour(
-bus_id int,
-source varchar(20),
-destination varchar(20),
-deoparture_date varchar(10),
-journey_hours int,
-foreign key (bus_id) references Bus(Bus_id),
-foreign key (deoparture_date) references BusDepartureTime(deoparture_date));
-
-create table BusReservation(
-bus_id int,
-source varchar(20),
-deoparture_date varchar(10),
-seat_type varchar(10),
-cost int,
-total_availabe_seats int,
-foreign key (deoparture_date) references BusDepartureTime(deoparture_date),
-foreign key (bus_id) references BusDepartureTime(bus_id));
-
+create table BusDepartureTime(bus_id int not null,source varchar(20),departure_date varchar(10),time_of_departure varchar(10),primary key(bus_id,source,departure_date),foreign key (bus_id) references Bus(Bus_id));
+create table BusJourneyHour(bus_id int,source varchar(20),destination varchar(20),departure_date varchar(10),journey_hours int,primary key(bus_id,source,destination,departure_date),foreign key (bus_id,source,departure_date) references BusDepartureTime(bus_id,source,departure_date));
+create table BusReservation(bus_id int,source varchar(20),destination varchar(20),departure_date varchar(10),seat_type varchar(10),cost int,total_availabe_seats int,primary key(bus_id,source,destination,departure_date,seat_type),foreign key (bus_id,source,departure_date) references BusDepartureTime(bus_id,source,departure_date));
+create table NearBycities( current_city varchar(20),nearby_city varchar(20),primary key (current_city,nearby_city));
+create table Locality(locality_id int not null auto_increment,locality_name varchar(20),city_name varchar(20), primary key (locality_id), foreign key(city_name) references City(city_name));
+create table Restaurants(restaurant_name varchar(30),locality_id int,restaurant_type varchar(10),rating int,street_address varchar(20),avg_cost_per_person int,primary key(restaurant_name,locality_id),foreign key (locality_id) references locality(locality_id));
+create table PlaceToVisit(place_name varchar(20),locality_id int,place_type varchar(20),discription_of_the_place varchar(50),street_address varchar (20),rating int,average_cost_per_person int);
+alter table PlaceToVisit add primary key(place_name,locality_id);
+ALTER TABLE PlaceToVisit ADD FOREIGN KEY(locality_id) REFERENCES Locality(locality_id);
+create table TypeOfRoom(room_type varchar(20),max_accomdation int,primary key(room_type));
+create table Hotel(hotel_name varchar(20),locality_id int, ratings numeric(2,1),street_address varchar(20), is_room_service char,contact_no int,primary key(hotel_name,locality_id),foreign key(locality_id) references Locality(locality_id)); 
+create table HotelReservation(hotel_name varchar(20),locality_id int,date_of_availability date,room_type varchar(20),total_available_rooms int,cost int,primary key(hotel_name,locality_id,date_of_availability,room_type),foreign key(hotel_name,locality_id) references Hotel(hotel_name,locality_id),foreign key (room_type) references TypeOfRoom(room_type));
 

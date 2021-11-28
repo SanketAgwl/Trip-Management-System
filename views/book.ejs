@@ -1,0 +1,68 @@
+<%- include('header') %>
+
+	<body>
+		<div class="login-form">
+			<h1>Find source and destination city and mode of travel</h1>
+			<form action="/bus" method="POST">
+				<input type="text" name="city1" placeholder="Source City" required>
+				<input type="text" name="city2" placeholder="Destination City" required>
+				<button type="submit">OK</button>
+			</form>
+			<!-- <form action ='train' method='GET'>
+			<button type="submit">Train</button>
+			</form> -->
+		<!-- </form> -->
+		</div>
+		<div class="login-form">
+			<h1>Choose source and destination city and mode of travel</h1>
+			<form action="/addbus" method="POST">
+				<input type="text" name="busid" placeholder="Bus ID" required>
+				<input type="text" name="city1" placeholder="Source City" required>
+				<input type="text" name="city2" placeholder="Destination City" required>
+				<input type="text" name="dd" placeholder="Departure date" required>
+				<input type="text" name="st" placeholder="Seat Type" required>
+				<input type="text" name="noseat" placeholder="No of Seats" required>
+				<button type="submit">ADD Bus</button>
+			</form>
+		</div>
+
+
+		<div class="container">
+			<!-- <h2>Responsive Tables Using LI <small>Triggers on 767px</small></h2> -->
+			<ul class="responsive-table">
+				<div class="table-header">
+				<div class="header__item"> </div>
+				<div class="header__item">Service Provider</div>
+				<div class="header__item"> </div>
+				<div class="header__item">Bus Number</div>
+				<div class="header__item"> </div>
+				<div class="header__item">AC</div>
+				<div class="header__item"> </div>
+
+				</div>
+		<% for(var i=0; i < data1.length; i++) { %>
+		
+			  <li class="table-row">
+				<div class="table-data" data-label="Amount"> <%= data1[i].service_provider %> </div>
+				<div class="table-data" data-label="Job Id"><%= data1[i].bus_id %></div>
+				<div class="table-data" data-label="Customer Name"> <%= data1[i].is_ac === 't'? "Yes" : "No" %></div>
+			  </li>
+		<% } %>
+			</ul>
+		  </div>
+
+
+
+	</body>
+</html>
+
+
+
+
+
+</div>
+
+
+
+
+<%- include('footer') %>
